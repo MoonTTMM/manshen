@@ -1,12 +1,53 @@
-　　<!DOCTYPE html>
-　　<html>
-　　<head>
-　　　　<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-　　　　<title>{{ page.title }}</title>
-　　</head>
-　　<body>
 
-　　　　{{ content }}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-　　</body>
-　　</html>
+    <title>{{page.title}}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/blog.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class="blog-nav-item active" href="#">{{page.upfoot}}</a>
+        </nav>
+      </div>
+    </div>
+
+    {{content}}
+
+    <footer class="blog-footer">
+      <p>
+      	Articles by <a href="#">Man Shen</a> <br />
+      	superttmm@163.com
+      </p>
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
