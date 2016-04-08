@@ -2,21 +2,21 @@
 layout:default
 ---
 
-    <div class="container">
+    <div>
 
-      <div class="row">
+      <div>
 
-        <div class="col-sm-8 blog-main">
+        <div>
 
-          <div class="blog-post">
-            <p class="blog-post-meta">{{ post.date | date_to_string }}<a href="#">Man Shen</a></p>
+          <div>
+            <p>{{ post.date | date_to_string }}<a href="#">Man Shen</a></p>
 
             {{content}}
 
           </div><!-- /.blog-post -->
 
           <nav>
-            <ul class="pager">
+            <ul>
               <li><a href="#">Previous</a></li>
               <li><a href="#">Next</a></li>
             </ul>
@@ -24,10 +24,10 @@ layout:default
 
         </div><!-- /.blog-main -->
 
-        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
-          <div class="sidebar-module">
+        <div>
+          <div>
             <h4>Elsewhere</h4>
-            <ul class="list-unstyled">
+            <ul>
               {% for post in site.related_posts limit:3 %}
                 <li><a href="{{ post.url }}">{{ post.title }}</a></li>
               {% endfor %}
