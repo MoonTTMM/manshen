@@ -4,10 +4,16 @@ layout: default
 <ul>
 	{% for post in site.posts %}
 　　<li>
-		<a class="col-sm-4" href="{{ site.baseurl }}{{ post.url }}">
-			{{ post.title }}
-		</a>
-		{{ post.date | date_to_string }} 
+		<div class="row">
+			<div class="col-xs-5 col-xs-offset-2">
+				<a href="{{ site.baseurl }}{{ post.url }}">
+					{{ post.title }}
+				</a>
+			</div>
+			<div class="col-xs-2">
+				{{ post.date | date_to_string }} 
+			</div>
+		</div>
 	</li>
 　　{% endfor %}
 </ul>
