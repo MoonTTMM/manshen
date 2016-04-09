@@ -9,19 +9,17 @@ layout: default
         <p class="lead blog-description">{{page.subtitle}}</p>
       </div>
 
-      <div>
-
-        <div>
-
+      <div class="row">
+        <div class="col-sm-8 blog-main">
           <div class="blog-post">
-            <p>{{ page.date | date_to_string }} by <a href="#">Man Shen</a></p>
+            <p class="blog-post-meta">{{ page.date | date_to_string }} by <a href="#">Man Shen</a></p>
 
             {{content}}
 
           </div><!-- /.blog-post -->
 
           <nav>
-            <ul>
+            <ul class="pager">
               <li><a href="#">Previous</a></li>
               <li><a href="#">Next</a></li>
             </ul>
@@ -29,14 +27,14 @@ layout: default
 
         </div><!-- /.blog-main -->
 
-        <div>
-          <div>
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module">
             <h4>Elsewhere</h4>
-            <ul>
+            <ol class="list-unstyled">
               {% for post in site.related_posts limit:3 %}
                 <li><a href="{{ post.url }}">{{ post.title }}</a></li>
               {% endfor %}
-            </ul>
+            </ol>
           </div>
         </div><!-- /.blog-sidebar -->
 
