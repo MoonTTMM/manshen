@@ -2,27 +2,34 @@
 layout: post
 title: Making an Extensible Robot Interaction System
 ---
-
-<p>
-MEF的优点（当然这是我所理解到的）：
-1. 帮助你面向接口编程。当然，不使用MEF依然可以实现这一点，这是面向对象的原则之一。
-2. 帮助你管理与发现components（discoverable at runtime）。当然，这个可以通过反射实现，但MEF帮助你更好的封装了这些实现。
-（<a href="http://www.codeproject.com/Articles/376033/From-Zero-to-Proficient-with-MEF">Tutorial与基本的best practise</a>)
-</p>
-
+<span> <b> 首先是需求 </b> <span>
 <p>
 在需求方面，服务机器人本身的需求并不固定，包括人脸识别、语音识别、手势识别，普通的界面控制，甚至在与移动底盘联系时还会有手柄、信息交互的Server/Client等需求，同时，灵活增删这些功能模块满足订制化需求也很重要。所以Extensibility将是一个非常重要的属性，也是选用MEF作为framework的一个最重要原因。
 （简单概括一下Extensibility，就是新功能加入时，除了新功能本身实现，尽量少甚至不改动原有代码，更具体的就是，不需要改动调用新功能的代码。）
 </p>
+<br />
 
+<span> <b> 然后是Tool </b> <span>
 <p>
-基于以上需求（其实在这里并不重要，关键就是对Extensibility的践行），设计主要分为三个部分Core，Platform 和 Sensors。Core是对通用数据结构，功能，UI的实现。例如Serialization，Log，MEF主要code，权限控制，UI General Style等。这一部分要做到与机器人本身逻辑的解耦。对代码质量的要求也是最好的。Platform其实是机器人的逻辑实现，包括与下位机（底盘运动控制）的交互，机器人API封装，逻辑相关界面。
+也就是MEF，以下是我理解到的MEF的优点：
+</p>
+<p>
+1. 帮助你面向接口编程。当然，不使用MEF依然可以实现这一点，这是面向对象的原则之一。
+2. 帮助你管理与发现components（discoverable at runtime）。当然，这个可以通过反射实现，但MEF帮助你更好的封装了这些实现。
+（<a href="http://www.codeproject.com/Articles/376033/From-Zero-to-Proficient-with-MEF">Tutorial与基本的best practise</a>)
+</p>
+<br/>
+
+<span> <b> 最后设计实现 </b> <span>
+<p>
+基于需求选择了工具（关键就是对Extensibility的践行），设计主要分为三个部分Core，Platform 和 Sensors。Core是对通用数据结构，功能，UI的实现。例如Serialization，Log，MEF主要code，权限控制，UI General Style等。这一部分要做到与机器人本身逻辑的解耦。对代码质量的要求也是最好的。Platform其实是机器人的逻辑实现，包括与下位机（底盘运动控制）的交互，机器人API封装，逻辑相关界面。
 Sensors就是传感器的组合，包括听（语音识别），看（人脸识别、手势识别），手柄等，这将是需求变化最大的部分。
 </p>
 
 <p>
 松耦合的要求在于Core是完全不可以依赖到Platform和sensor；Platform只依赖到了Sensor的抽象SensorBroker，不可以依赖到某一个具体的sensor；sensor是可以依赖到Core和Platform的。当一个新的sensor component加入时，Platform对sensor的调用是通过sensorBroker完成的，所以platform的代码完全不用改动，只需要完成sensor的具体实现。
 </p>
+<br />
 
 <p>
 在实现过程中，MEF其实只是一个工具，可以帮助发现所有的sensor（MEF在架构里的功能之一），platform会完成所有sensor的初始化，关闭，启动sensor相关功能等逻辑，但sensor本身是自治的，处理信息并向platform发送command。MEF也可以通过Attribute的标识，来发现某一个具体的sensor，同时不需要对那一个具体sensor产生依赖。
@@ -46,6 +53,11 @@ public List<Lazy<INotifier, INotifierMetadata>> Notifiers { get; set; }
 </p>
 <p>
 在core中做的一件重要的事情就是去load这些components(所有的export在MEF中都是component的概念)所在的dll，这也是在程序中可以通过MEF去发现他们的前提。
+</p>
+
+<p><b>Finally!</b></p>
+<p>
+单纯在架构方面，做了这么多事，最终要实现的效果就是，当需要删除一个sensor的功能，非常简单，去删掉这个项目，或者在build的文件夹里删掉dll，程序工作正常，只是少掉相应功能。当需要增加一个sensor，增加一个project，里面实现SensorBroker里的接口，加上对应的Attribuite，当然，sensor自己的功能也是要实现的，设置build后dll放到的路径。然后，Done!新功能就自动加进去了。
 </p>
 
 
