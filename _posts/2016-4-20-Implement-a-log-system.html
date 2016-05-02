@@ -1,0 +1,49 @@
+---
+layout: post
+title: 实现一个易于扩展的log模块
+---
+<p>
+Log是一个对用户透明，但对研发和整体项目维护十分重要的模块。因为其与产品核心功能缺乏直接相关，往往被忽略；然而另一方面，他又是各个产品都需要的，所以一个好的设计将会有更多的复用机会。同时随着互联网的发展，Log以另一种形式出现，那就是记录用户习惯，产品状态等，成为大数据分析的一个基础来源，在这个范畴上，Log的定义将远远超过之前的Log的意义。以下的讨论将集中于产品如何将log（任何想要记录下来的产品相关信息）记录到本地，或云端，或各种地方。
+</p>
+
+<h3><b>Software entities should be open for extension,but closed for modification</b><h3>
+<p>以上那段话，俗称<a herf="https://en.wikipedia.org/wiki/Open/closed_principle">开闭原则</a>。设计时首先要考虑的就是，在将来哪些东西会变动，我们需要给易于变动的地方提供足够灵活的接口，方便将来的扩展；同时尽量不改动原有代码。Log会变动的其实很明显，要log啥，log到哪里，这也是我们设计的切入点，目标就是一旦以上两点说到的改动了，除了必要的实现功能的代码改动，调用log的地方不用改。</p>
+<br/>
+<h3><b>log到哪里</b></h3>
+<p>
+首先考虑log到哪里。可能是本地，可能是云端，可能是点对点的实时监控。OK，到这里可能一个经典的设计场景已经呼之欲出了，那就是观察者模式：一旦需要log的事件发生，通知所有的订阅者。实现这个模式的方式，在C#里我选择了事件（event），本质则是多播委托（multicast delegate），通过event的封装，注册新的场景让log打进去将会十分简单。
+{% highlight text %}
+    Log.Global.ErrorReported += DefaultErrorReported;
+{% endhighlight %}
+<p>
+
+<p>
+在需要记录的地方，仍然只是一行代码，
+	Log.ReportError((uint)ErrorCode.ROBOT_UNHANDLED_EXCEPTION, args.Exception, "UnobservedTaskException");
+调用并不需要改变。这一行代码里实现的其实是调用这个multicast delegate.
+</p>
+
+<br/>
+<h3><b>log些啥</b></h3>
+<p>
+然后需要考虑的是log内容的变动，根据以上的设计，event对应内容自然就用到event args。这里需要做一些简单的设计，当前设计是有3个event来满足内容需求，
+{% highlight text %}
+    event EventHandler<LineAppendedEventArgs> LineAppended;
+    event EventHandler<ErrorReportedEventArgs> ErrorReported;
+    event EventHandler<EventReportedEventArgs> EventReported;
+{% endhighlight %}
+其中，LineAppendedEventArgs，ErrorReportedEventArgs和EventReportedEventArgs都继承自LoggingEventArgs。根据名字可以理解，LineAppended是最灵活也是最基本的可以log任何信息，ErrorReported和EventReported对一般log信息进行了各自封装以记录特定的内容：错误和用户触发的事件。为了重用具体实现录入的code，可以自己做一些TextAppender，FileAppender，HttpAppender来实现记录到各处的方法。
+</p>
+<br/>
+
+<p>
+一个简单的log系统到这里就设计完毕，使用至今需求改动并不多，除了原来的本地记录error外，还需要在云端记录错误信息。这样的改动针对现有log架构是十分方便的，除了一行code，
+{% highlight text %}
+	Log.Global.ErrorReported += OnlineErrorReported;
+{% endhighlight %}
+并在OnlineErrorReported中实现用http写入云端数据库的方法外，基本不需要任何其它代码改动。
+</p>
+<p>
+当然在一个完整的log功能中，这只是client端完成的工作，如何完成一个应对各种高并发情况的server学问就更多了，现阶段只是用node.js + mongodb 搭了一个简单框架，道行太浅就不bb了。
+</p>
+
