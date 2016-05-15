@@ -1,0 +1,44 @@
+---
+layout: post
+title: Learning Javascript
+---
+
+<p>
+Grammar just has no special. To understand JavaScript, the most important thing is to understand what is prototype-based. 
+</p>
+
+<h3><b>Comparing to Java(C++, C#)</b></h3>
+<p>
+This is an easy to have general concept.JavaScript is an Object-oriented (prototype-based) language. No distinction between types of objects. Inheritance is through the prototype mechanism, and properties and methods can be added to any object dynamically. (dynamic inheritance)</p>
+<p>
+Java is a Classed-based language. Objects are divided into classes and instances with all inheritance through the class hierarchy. Classes and instances cannot have proterties or methods added dynamically.</p>
+<br />
+<p>
+JavaScript define and create objects with constructor functions.</p>
+<p>
+Java define a class with a class definition; instantiate a class with constructor methods.</p>
+<br />
+<p>
+JavaScript construct an object hierarchy by assigning an object as the prototype associated with a constructor function. And inherit properties by following the prototype chain.</p>
+<p>
+Java construct an object hierarchy by using class definitions to define subclasses of existing classes. And inherit properties by following the class chain.</p>
+<br />
+<p>
+Here is a picture to help understand prototype chain.
+<img src="/manshen/imgs/prototypeChain.png" /></p>
+<p>
+Here is a screen shot to help understand the relationship between prototype and the constructor. 
+<img src="/manshen/imgs/prototype.jpg" /></p>
+<p>
+So only a "function typed" object has property "prototype", which is the template help to construct a new object, and the prototype has property "constructor", which refers back to the function. And all objects have property "constructor", and all objects have property "__proto__", like below picture.
+<img src="/manshen/imgs/__proto__.jpg" /></p>
+
+<h3><b>Adding properties.</b></h3>
+<p>
+Properties can be added to any object at run time. Properties can be added to the object itself or to all objects that inherit properties from the prototype, like below.</p>
+{% highlight text %}
+mark.bonus = 3000;
+Employ.prototype.specialty = "none";
+{% endhighlight %}
+
+
