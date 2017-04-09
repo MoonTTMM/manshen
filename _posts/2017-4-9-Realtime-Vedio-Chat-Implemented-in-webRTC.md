@@ -6,14 +6,14 @@ title: Realtime vedio chat implemented in webRTC
 ## 1. Overview
 WebRTC enables peer to peer comunication. But server is still needed for signaling (exchange metadata between peers). And webRTC does not define the signaling protocal itself, you can implement it anyway you like, as long as certain info that webRTC needed could be exchange successfully.
 
-![image](http://note.youdao.com/favicon.ico)
+![image](http://moonttmm.github.io/manshen/imgs/webrtc-signaling.png)
 
 In this image, you could see there are two parts: signaling and peer to peer communication via webRTC. I could disscuss the two parts with the help of an open source implemetation: [nextRTC](https://nextrtc.org/), it has provided a wrapper of webRTC offical api and an implementation of signaling server in Java. In this article, we would only consider the vedio chat in a LAN, so NAT and firewall are not discussed.
 
 ## 2. webRTC
 I think webRTC maybe the easier part, as it has api offically. In below picture you could see where it is in the whole architecture.
 
-![image](http://note.youdao.com/favicon.ico)
+![image](http://moonttmm.github.io/manshen/imgs/webrtcArchitecture.png)
 
 Without considering the signaling mechanisim, using the offical api, RTCPeerConnection, the general process of A calling B is:
 1. A create a RTCPeerConnection, createOffer, setLocalDescription, using signaling mechanism send SDP(session description metadata, which is the necessary for peer to peer connection) to B, more specifically see below code;
